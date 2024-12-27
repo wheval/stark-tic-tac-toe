@@ -1,7 +1,8 @@
 [package]
 cairo-version = "=2.8.4"
-name = "dojo_starter"
+name = "engine"
 version = "1.0.9"
+edition = "2023_11"
 
 [cairo]
 sierra-replace-ids = true
@@ -19,3 +20,4 @@ build-external-contracts = ["dojo::world::world_contract::world"]
 
 [dev-dependencies]
 dojo_cairo_test = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.9" }
+openzeppelin_utils = "0.17.0"
