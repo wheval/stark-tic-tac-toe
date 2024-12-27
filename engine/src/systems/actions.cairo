@@ -338,7 +338,20 @@ pub mod actions {
             world.write_model(@player_o);
             world.emit_event(@Ended { match_id: board.match_id, winner, finished: false });
         }
-        fn read_board(self: @ContractState) -> Map<Position, bool> {}
+        fn read_board(self: @ContractState) -> Map<Position, u8> {
+            let mut world = self.world_default();
+            let player = get_caller_address();
+            let board: Board = world.read_model(player);
+
+            let player_x: Player = world.read_model(board.x);
+            let player_o: Player = world.read_model(board.o);
+
+            let board_empty = board.empty;
+            let board_x = player_x.marks;
+            let board_o = player_o.marks;
+
+            let mut board_map: Map<Position, u8> = map![];
+        }
     }
 
     #[generate_trait]
