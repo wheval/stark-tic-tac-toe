@@ -1,0 +1,21 @@
+{
+  "name": "stark-tic-tac-toe",
+  "version": "1.0.0",
+  "description": "Provable Tic-Tac-Toe built onchain on Starknet using Dojo",
+  "main": "index.js",
+  "scripts": {
+    "build-e": "cd engine && sozo build && scarb fmt",
+    "test-e": "cd engine && sozo test && scarb fmt",
+    "lint-e": "cd engine && scarb fmt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoarinSkySagar/stark-tic-tac-toe.git"
+  },
+  "author": "SoarinSkySagar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SoarinSkySagar/stark-tic-tac-toe/issues"
+  },
+  "homepage": "https://github.com/SoarinSkySagar/stark-tic-tac-toe#readme"
+}
