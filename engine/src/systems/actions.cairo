@@ -1,7 +1,7 @@
 use engine::models::{Position};
 
 #[starknet::interface]
-trait IActions<T> {
+pub trait IActions<T> {
     fn start(ref self: T);
     fn start_private(ref self: T);
     fn join(ref self: T, match_id: u32);
@@ -12,7 +12,7 @@ trait IActions<T> {
 
 #[dojo::contract]
 pub mod actions {
-    use super::{IActions, Position};
+    use super::{IActions, Position, array_contains_position};
     use starknet::{ContractAddress, get_caller_address};
     use engine::models::{Matchmaker, Board, Player};
 
@@ -265,11 +265,30 @@ pub mod actions {
             world.write_model(@player_x);
             world.write_model(@player_o);
             world.emit_event(@Marked { player, position, symbol: player == board.x });
+
+            let updated_player: Player = world.read_model(player);
+
+            if array_contains_position(@updated_player.marks, Position {i: position.i, j: 1}) && array_contains_position(@updated_player.marks, Position {i: position.i, j: 2}) && array_contains_position(@updated_player.marks, Position {i: position.i, j: 3}) {
+                self.end(updated_player.match_id, player, true);
+            } else if array_contains_position(@updated_player.marks, Position {i: 1, j: position.j}) && array_contains_position(@updated_player.marks, Position {i: 2, j: position.j}) && array_contains_position(@updated_player.marks, Position {i: 3, j: position.j}) {
+                self.end(updated_player.match_id, player, true);
+            };
+
+            if position.i == position.j {
+                if array_contains_position(@updated_player.marks, Position {i: 1, j: 1}) && array_contains_position(@updated_player.marks, Position {i: 2, j: 2}) && array_contains_position(@updated_player.marks, Position {i: 3, j: 3}) {
+                    self.end(updated_player.match_id, player, true);
+                };
+            } else if position.i + position.j == 4 {
+                if array_contains_position(@updated_player.marks, Position {i: 1, j: 3}) && array_contains_position(@updated_player.marks, Position {i: 2, j: 2}) && array_contains_position(@updated_player.marks, Position{i: 3, j: 1}) {
+                    self.end(updated_player.match_id, player, true);
+                };
+            };
+
         }
         fn leave(ref self: ContractState) {
             let mut world = self.world_default();
             let player = get_caller_address();
-
+            
             let player_info: Player = world.read_model(player);
 
             let board: Board = world.read_model(player_info.match_id);
@@ -279,24 +298,7 @@ pub mod actions {
                 winner = board.o;
             }
 
-            let new_board = Board {
-                match_id: board.match_id,
-                x: board.x,
-                o: board.o,
-                empty: board.empty,
-                winner,
-                active: false,
-                ready: true,
-            };
-
-            let player_x = Player { address: board.x, match_id: 0, marks: array![], turn: false };
-
-            let player_o = Player { address: board.o, match_id: 0, marks: array![], turn: false };
-
-            world.write_model(@new_board);
-            world.write_model(@player_x);
-            world.write_model(@player_o);
-            world.emit_event(@Ended { match_id: board.match_id, winner, finished: false });
+            self.end(player_info.match_id, winner, false);
         }
         fn read_board(self: @ContractState) -> (Array<Position>, Array<Position>, Array<Position>) {
             let mut world = self.world_default();
@@ -319,5 +321,55 @@ pub mod actions {
         fn world_default(self: @ContractState) -> dojo::world::WorldStorage {
             self.world(@"engine")
         }
+
+        fn end(ref self: ContractState, match_id: u32, winner: ContractAddress, finished: bool) {
+            let mut world = self.world_default();
+
+            let board: Board = world.read_model(match_id);
+
+            let new_board = Board {
+                match_id: board.match_id,
+                x: board.x,
+                o: board.o,
+                empty: board.empty,
+                winner,
+                active: false,
+                ready: true,
+            };
+
+            let player_x = Player { address: board.x, match_id: 0, marks: array![], turn: false };
+
+            let player_o = Player { address: board.o, match_id: 0, marks: array![], turn: false };
+
+            world.write_model(@new_board);
+            world.write_model(@player_x);
+            world.write_model(@player_o);
+            world.emit_event(@Ended { match_id: board.match_id, winner, finished });
+        }
+    }
+}
+
+fn array_contains_position(array: @Array<Position>, position: Position) -> bool {
+    let mut res = false;
+    for i in 0..array.len() {
+        if array[i] == @position {
+            res = true;
+            break;
+        }
+    };
+    res
+}
+
+#[cfg(test)]
+mod actions_test {
+    use super::{array_contains_position, Position};
+
+    #[test]
+    fn test_array_contains_position() {
+        let array = array![Position { i: 1, j: 1 }, Position { i: 1, j: 2 }];
+        let position1 = Position { i: 1, j: 1 };
+        let position2 = Position { i: 2, j: 2 };
+        assert(array_contains_position(@array, position1), 'Position not found');
+        assert(!array_contains_position(@array, position2), 'Position found');
     }
 }
