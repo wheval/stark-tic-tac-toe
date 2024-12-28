@@ -9,7 +9,7 @@ pub struct Matchmaker {
     pub last_board_ready: bool,
 }
 
-#[derive(Copy, Drop, Serde, Debug)]
+#[derive(Drop, Serde, Debug)]
 #[dojo::model]
 pub struct Board {
     #[key]
@@ -22,7 +22,7 @@ pub struct Board {
     pub ready: bool,
 }
 
-#[derive(Copy, Drop, Serde, Debug)]
+#[derive(Drop, Serde, Debug)]
 #[dojo::model]
 pub struct Player {
     #[key]
@@ -32,7 +32,7 @@ pub struct Player {
     pub turn: bool,
 }
 
-#[derive(Copy, Drop, Serde, IntrospectPacked, Debug)]
+#[derive(Copy, Drop, Serde, IntrospectPacked, Debug, PartialEq)]
 pub struct Position {
     pub i: u8,
     pub j: u8,

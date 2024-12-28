@@ -16,11 +16,8 @@ pub mod actions {
     use starknet::{ContractAddress, get_caller_address};
     use engine::models::{Matchmaker, Board, Player};
 
-    use dojo::model::{ModelStorage, ModelValueStorage};
+    use dojo::model::{ModelStorage};
     use dojo::event::EventStorage;
-
-    use openzeppelin_utils::serde::SerializedAppend;
-
 
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
@@ -71,7 +68,7 @@ pub mod actions {
                 let mut empty_board: Array<Position> = array![];
                 for i in 1..4_u8 {
                     for j in 1..4_u8 {
-                        empty_board.append_serde(Position { i, j });
+                        empty_board.append(Position { i, j });
                     }
                 };
 
@@ -135,7 +132,7 @@ pub mod actions {
             let mut empty_board: Array<Position> = array![];
             for i in 1..4_u8 {
                 for j in 1..4_u8 {
-                    empty_board.append_serde(Position { i, j });
+                    empty_board.append(Position { i, j });
                 }
             };
 
@@ -216,12 +213,12 @@ pub mod actions {
             let mut empty_board: Array<Position> = array![];
             for pos in board_empty {
                 if pos != position {
-                    empty_board.append_serde(pos);
+                    empty_board.append(pos);
                 }
             };
 
             if player == board.x {
-                board_x.append_serde(position);
+                board_x.append(position);
                 player_x =
                     Player {
                         address: player_x.address,
@@ -237,7 +234,7 @@ pub mod actions {
                         turn: true,
                     };
             } else {
-                board_o.append_serde(position);
+                board_o.append(position);
                 player_o =
                     Player {
                         address: player_o.address,
@@ -278,7 +275,7 @@ pub mod actions {
             let board: Board = world.read_model(player_info.match_id);
 
             let mut winner: ContractAddress = board.x;
-            if player = board.x {
+            if player == board.x {
                 winner = board.o;
             }
 
