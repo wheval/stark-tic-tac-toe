@@ -3,8 +3,8 @@ version = 1
 
 [[package]]
 name = "dojo"
-version = "1.0.2"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.0.2#8eb8c480676ea8b0fc5d6e59585cdbab1ff8200d"
+version = "1.0.9"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.0.9#04b5f025d998eee19cd21d33bd8a992498a73160"
 dependencies = [
  "dojo_plugin",
 ]
@@ -12,7 +12,7 @@ dependencies = [
 [[package]]
 name = "dojo_cairo_test"
 version = "1.0.0-rc.0"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.0.2#8eb8c480676ea8b0fc5d6e59585cdbab1ff8200d"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.0.9#04b5f025d998eee19cd21d33bd8a992498a73160"
 dependencies = [
  "dojo",
 ]
@@ -20,12 +20,19 @@ dependencies = [
 [[package]]
 name = "dojo_plugin"
 version = "2.8.4"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.0.2#8eb8c480676ea8b0fc5d6e59585cdbab1ff8200d"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.0.9#04b5f025d998eee19cd21d33bd8a992498a73160"
 
 [[package]]
-name = "dojo_starter"
-version = "1.0.2"
+name = "engine"
+version = "1.0.9"
 dependencies = [
  "dojo",
  "dojo_cairo_test",
+ "openzeppelin_utils",
 ]
+
+[[package]]
+name = "openzeppelin_utils"
+version = "0.17.0"
+source = "registry+https://scarbs.xyz/"
+checksum = "sha256:36d93e353f42fd6b824abcd8b4b51c3f5d02c893c5f886ae81403b0368aa5fde"
