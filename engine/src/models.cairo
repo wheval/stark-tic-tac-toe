@@ -1,6 +1,6 @@
 use starknet::ContractAddress;
 
-#[derive(Copy, Drop, Serde, Debug)]
+#[derive(Copy, Drop, Serde, Debug, PartialEq)]
 #[dojo::model]
 pub struct Matchmaker {
     #[key]
@@ -9,7 +9,7 @@ pub struct Matchmaker {
     pub last_board_ready: bool,
 }
 
-#[derive(Drop, Serde, Debug)]
+#[derive(Drop, Serde, Debug, PartialEq)]
 #[dojo::model]
 pub struct Board {
     #[key]
@@ -22,7 +22,7 @@ pub struct Board {
     pub ready: bool,
 }
 
-#[derive(Drop, Serde, Debug)]
+#[derive(Drop, Serde, Debug, PartialEq)]
 #[dojo::model]
 pub struct Player {
     #[key]

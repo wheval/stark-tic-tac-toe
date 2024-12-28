@@ -62,7 +62,7 @@ pub mod actions {
 
             let matchmaker: Matchmaker = world.read_model(1);
 
-            if matchmaker.last_board_ready {
+            if matchmaker.last_board_ready || matchmaker.last_board == 0 {
                 let zero_address: ContractAddress = 0.try_into().unwrap();
                 let match_id = matchmaker.last_board + 1;
                 let mut empty_board: Array<Position> = array![];
@@ -164,9 +164,6 @@ pub mod actions {
 
             let board: Board = world.read_model(match_id);
 
-            let zero_address: ContractAddress = 0.try_into().unwrap();
-            assert(board.x != zero_address, 'Match not found');
-
             let new_board = Board {
                 match_id,
                 x: board.x,
@@ -202,6 +199,7 @@ pub mod actions {
             assert(board.ready, 'Match not ready');
             assert(board.x == player || board.o == player, 'Not in this match');
             assert(player_info.turn, 'Not your turn');
+            assert(array_contains_position(@board.empty, position), 'Position already marked');
 
             let mut player_x: Player = world.read_model(board.x);
             let mut player_o: Player = world.read_model(board.o);
@@ -233,6 +231,8 @@ pub mod actions {
                         marks: board_o,
                         turn: true,
                     };
+                world.write_model(@player_o);
+                world.write_model(@player_x);
             } else {
                 board_o.append(position);
                 player_o =
@@ -249,6 +249,8 @@ pub mod actions {
                         marks: board_x,
                         turn: true,
                     };
+                world.write_model(@player_x);
+                world.write_model(@player_o);
             }
 
             let new_board = Board {
@@ -262,33 +264,44 @@ pub mod actions {
             };
 
             world.write_model(@new_board);
-            world.write_model(@player_x);
-            world.write_model(@player_o);
             world.emit_event(@Marked { player, position, symbol: player == board.x });
 
             let updated_player: Player = world.read_model(player);
 
-            if array_contains_position(@updated_player.marks, Position {i: position.i, j: 1}) && array_contains_position(@updated_player.marks, Position {i: position.i, j: 2}) && array_contains_position(@updated_player.marks, Position {i: position.i, j: 3}) {
+            if array_contains_position(@updated_player.marks, Position { i: position.i, j: 1 })
+                && array_contains_position(@updated_player.marks, Position { i: position.i, j: 2 })
+                && array_contains_position(
+                    @updated_player.marks, Position { i: position.i, j: 3 },
+                ) {
                 self.end(updated_player.match_id, player, true);
-            } else if array_contains_position(@updated_player.marks, Position {i: 1, j: position.j}) && array_contains_position(@updated_player.marks, Position {i: 2, j: position.j}) && array_contains_position(@updated_player.marks, Position {i: 3, j: position.j}) {
+            } else if array_contains_position(
+                @updated_player.marks, Position { i: 1, j: position.j },
+            )
+                && array_contains_position(@updated_player.marks, Position { i: 2, j: position.j })
+                && array_contains_position(
+                    @updated_player.marks, Position { i: 3, j: position.j },
+                ) {
                 self.end(updated_player.match_id, player, true);
             };
 
             if position.i == position.j {
-                if array_contains_position(@updated_player.marks, Position {i: 1, j: 1}) && array_contains_position(@updated_player.marks, Position {i: 2, j: 2}) && array_contains_position(@updated_player.marks, Position {i: 3, j: 3}) {
+                if array_contains_position(@updated_player.marks, Position { i: 1, j: 1 })
+                    && array_contains_position(@updated_player.marks, Position { i: 2, j: 2 })
+                    && array_contains_position(@updated_player.marks, Position { i: 3, j: 3 }) {
                     self.end(updated_player.match_id, player, true);
                 };
             } else if position.i + position.j == 4 {
-                if array_contains_position(@updated_player.marks, Position {i: 1, j: 3}) && array_contains_position(@updated_player.marks, Position {i: 2, j: 2}) && array_contains_position(@updated_player.marks, Position{i: 3, j: 1}) {
+                if array_contains_position(@updated_player.marks, Position { i: 1, j: 3 })
+                    && array_contains_position(@updated_player.marks, Position { i: 2, j: 2 })
+                    && array_contains_position(@updated_player.marks, Position { i: 3, j: 1 }) {
                     self.end(updated_player.match_id, player, true);
                 };
             };
-
         }
         fn leave(ref self: ContractState) {
             let mut world = self.world_default();
             let player = get_caller_address();
-            
+
             let player_info: Player = world.read_model(player);
 
             let board: Board = world.read_model(player_info.match_id);
@@ -303,7 +316,8 @@ pub mod actions {
         fn read_board(self: @ContractState) -> (Array<Position>, Array<Position>, Array<Position>) {
             let mut world = self.world_default();
             let player = get_caller_address();
-            let board: Board = world.read_model(player);
+            let player_info: Player = world.read_model(player);
+            let board: Board = world.read_model(player_info.match_id);
 
             let player_x: Player = world.read_model(board.x);
             let player_o: Player = world.read_model(board.o);
@@ -349,7 +363,7 @@ pub mod actions {
     }
 }
 
-fn array_contains_position(array: @Array<Position>, position: Position) -> bool {
+pub fn array_contains_position(array: @Array<Position>, position: Position) -> bool {
     let mut res = false;
     for i in 0..array.len() {
         if array[i] == @position {
