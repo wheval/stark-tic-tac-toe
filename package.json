@@ -6,7 +6,11 @@
   "scripts": {
     "build-e": "cd engine && sozo build && scarb fmt",
     "test-e": "cd engine && sozo test && scarb fmt",
-    "lint-e": "cd engine && scarb fmt"
+    "lint-e": "cd engine && scarb fmt",
+    "dev-c": "cd client && pnpm run dev",
+    "buid-c": "cd client && pnpm run lint && pnpm run build",
+    "start-c": "cd client && pnpm run start",
+    "lint-c": "cd client && pnpm run lint"
   },
   "repository": {
     "type": "git",
