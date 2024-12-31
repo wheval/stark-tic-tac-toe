@@ -297,6 +297,12 @@ pub mod actions {
                     self.end(updated_player.match_id, player, true);
                 };
             };
+
+            let zero_address: ContractAddress = 0.try_into().unwrap();
+
+            if new_board.empty.len() == 0 {
+                self.end(updated_player.match_id, zero_address, true);
+            };
         }
         fn leave(ref self: ContractState) {
             let mut world = self.world_default();
