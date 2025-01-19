@@ -10,7 +10,8 @@
     "dev-c": "cd client && pnpm run dev",
     "buid-c": "cd client && pnpm run lint && pnpm run build",
     "start-c": "cd client && pnpm run start",
-    "lint-c": "cd client && pnpm run lint"
+    "lint-c": "cd client && pnpm run lint",
+    "check": "cd client && pnpm run build && pnpm run lint && cd ../engine && sozo build && sozo test && scarb fmt"
   },
   "repository": {
     "type": "git",

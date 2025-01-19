@@ -24,7 +24,7 @@ Make sure you have the following prerequisites installed on your system:
    cd client
    pnpm install
    ```
-   
+
 3. Create and switch into you own branch:
     ```bash
    git branch <your-branch>
@@ -131,4 +131,4 @@ Run these commands from the `/client` directory:
 
 - Make sure to follow the respective commands for working on either the smart contracts or the frontend.
 - Run `pnpm install` in the `/client` directory before running the frontend for the first time.
-- Ensure the code is properly formatted using `scarb fmt` before making a pull request.
+- Ensure the code is properly building, passing tests and formatted using `pnpm run check` at the root directory before making a pull request.
