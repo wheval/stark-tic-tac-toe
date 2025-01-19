@@ -1,9 +1,9 @@
 {
   "world": {
-    "class_hash": "0x79d9ce84b97bcc2a631996c3100d57966fc2f5b061fb1ec4dfd0040976bcac6",
-    "address": "0xe2ea9b5dd9804d13903edf712998943b7d5d606c139dd0f13eeb8f5b84da8d",
-    "seed": "dojo_starter",
-    "name": "Dojo starter",
+    "class_hash": "0x45575a88cc5cef1e444c77ce60b7b4c9e73a01cbbe20926d5a4c72a94011410",
+    "address": "0x50d7fc5593c05018872173d900886b503ff2510fb8ac5962b2513429b2431c2",
+    "seed": "engine",
+    "name": "engine",
     "entrypoints": [
       "uuid",
       "set_metadata",
@@ -92,6 +92,10 @@
           {
             "name": "metadata_uri",
             "type": "core::byte_array::ByteArray"
+          },
+          {
+            "name": "metadata_hash",
+            "type": "core::felt252"
           }
         ]
       },
@@ -1002,6 +1006,11 @@
             "name": "uri",
             "type": "core::byte_array::ByteArray",
             "kind": "data"
+          },
+          {
+            "name": "hash",
+            "type": "core::felt252",
+            "kind": "data"
           }
         ]
       },
@@ -1243,8 +1252,8 @@
   },
   "contracts": [
     {
-      "address": "0x58b83bea84766c5725c12e239c1ec9e1fde679ddf709b772fe7a8fdfd3cda27",
-      "class_hash": "0x3f87eccb39c9dc7bb70d372350f4360ae1ff9da43bd72c89a96e336402a569b",
+      "address": "0x5978d5754ab0e12e44422ea8d86c7451750329b5caa673e24316a235d518820",
+      "class_hash": "0x33314c97a80cc8d5aa544928f13421b2d7660d1dc4bca617c706902425fd772",
       "abi": [
         {
           "type": "impl",
@@ -1299,56 +1308,81 @@
         {
           "type": "impl",
           "name": "ActionsImpl",
-          "interface_name": "dojo_starter::systems::actions::IActions"
+          "interface_name": "engine::systems::actions::IActions"
         },
         {
-          "type": "enum",
-          "name": "dojo_starter::models::Direction",
-          "variants": [
+          "type": "struct",
+          "name": "engine::models::Position",
+          "members": [
             {
-              "name": "None",
-              "type": "()"
+              "name": "i",
+              "type": "core::integer::u8"
             },
             {
-              "name": "Left",
-              "type": "()"
-            },
-            {
-              "name": "Right",
-              "type": "()"
-            },
-            {
-              "name": "Up",
-              "type": "()"
-            },
-            {
-              "name": "Down",
-              "type": "()"
+              "name": "j",
+              "type": "core::integer::u8"
             }
           ]
         },
         {
           "type": "interface",
-          "name": "dojo_starter::systems::actions::IActions",
+          "name": "engine::systems::actions::IActions",
           "items": [
             {
               "type": "function",
-              "name": "spawn",
+              "name": "start",
               "inputs": [],
               "outputs": [],
               "state_mutability": "external"
             },
             {
               "type": "function",
-              "name": "move",
+              "name": "start_private",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "join",
               "inputs": [
                 {
-                  "name": "direction",
-                  "type": "dojo_starter::models::Direction"
+                  "name": "match_id",
+                  "type": "core::integer::u32"
                 }
               ],
               "outputs": [],
               "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "mark",
+              "inputs": [
+                {
+                  "name": "position",
+                  "type": "engine::models::Position"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "leave",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "read_board",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "(core::array::Array::<engine::models::Position>, core::array::Array::<engine::models::Position>, core::array::Array::<engine::models::Position>)"
+                }
+              ],
+              "state_mutability": "view"
             }
           ]
         },
@@ -1451,7 +1485,7 @@
         },
         {
           "type": "event",
-          "name": "dojo_starter::systems::actions::actions::Event",
+          "name": "engine::systems::actions::actions::Event",
           "kind": "enum",
           "variants": [
             {
@@ -1468,11 +1502,14 @@
         }
       ],
       "init_calldata": [],
-      "tag": "dojo_starter-actions",
-      "selector": "0x7a1c71029f2d0b38e3ac89b09931d08b6e48417e079c289ff19a8698d0cba33",
+      "tag": "engine-actions",
+      "selector": "0x39a91ab4c57a616c18fac7d0ca485d3292309e2e3c70a29dbb80e33fe617067",
       "systems": [
-        "spawn",
-        "move",
+        "start",
+        "start_private",
+        "join",
+        "mark",
+        "leave",
         "upgrade"
       ]
     }
@@ -1480,29 +1517,47 @@
   "models": [
     {
       "members": [],
-      "class_hash": "0x7deb48ccf95cc441a0489cfefdae54aeb6f8ec462ba13ff25e23f080e66cc2f",
-      "tag": "dojo_starter-DirectionsAvailable",
-      "selector": "0x77844f1facb51e60e546a9832d56c6bd04fa23be4fd5b57290caae5e9a3c1e4"
+      "class_hash": "0x57a8b1f390891435b19d8e6609d41e3c70364385a45182588b4a82c5b6ee094",
+      "tag": "engine-Board",
+      "selector": "0x55f3fe83f6e527a39540196dbf78c79b673cc0dee370f45bba6258e038a8aef"
     },
     {
       "members": [],
-      "class_hash": "0x70edf8f3be0b118e78f856f3ea9ebb652cba3684abaf7f299bfa6f93bf907c9",
-      "tag": "dojo_starter-Moves",
-      "selector": "0x2a29373f1af8348bd366a990eb3a342ef2cbe5e85160539eaca3441a673f468"
+      "class_hash": "0x45a1c79be01dd68870bad62703a476530488459f9fd321a2a427608ef9403c0",
+      "tag": "engine-Matchmaker",
+      "selector": "0x4200e29520acf16dd22c8c7bc5ab63f825355a45736eee44950cc52c4daccc3"
     },
     {
       "members": [],
-      "class_hash": "0x2283c68ecba5c60bbbbd3b00659808a02244468e41a1d2cdba1312d65b83594",
-      "tag": "dojo_starter-Position",
-      "selector": "0x2ac8b4c190f7031b9fc44312e6b047a1dce0b3f2957c33a935ca7846a46dd5b"
+      "class_hash": "0x4bdf2a6d0deaf01f34d4633d3a9e33842b42146ca540d474c081e1fd06d7e90",
+      "tag": "engine-Player",
+      "selector": "0xa623b8c0ed374c5b66800825a5613ab46f10841c00b4995866b23030cc68a4"
     }
   ],
   "events": [
     {
       "members": [],
-      "class_hash": "0x5be0a05a5df3bd3b4fc17f8b1feb395cb463ced20ea41d4fbb9b86a4d7efc66",
-      "tag": "dojo_starter-Moved",
-      "selector": "0x504403e5c02b6442527721fc464d9ea5fc8f1ee600ab5ccd5c0845d36fd45f1"
+      "class_hash": "0x117a182e61629172416b52cb5f958d3ecd1154744c3869c0e21981b62a11b9e",
+      "tag": "engine-Created",
+      "selector": "0x5b45f9c52988b8a1ee777d0ab3e79df814bd0b3b60f6e402de7332e68644b13"
+    },
+    {
+      "members": [],
+      "class_hash": "0x7ea6106af0284b970df720e0ecdae06b22fe2307cdcdb1f772b79e5b1367094",
+      "tag": "engine-Ended",
+      "selector": "0x5edd0d8cfae318fba0764d8ea1fd3de548b9512eb7578bff4ca809648acbf61"
+    },
+    {
+      "members": [],
+      "class_hash": "0x7819287490673f65e047aeefa346462219168dc13b6872ca11bbd8e32f6a201",
+      "tag": "engine-Marked",
+      "selector": "0x4e20c142e8ff7993e2b0928f924599e7eed6d932eb5e69751da82db162c2f33"
+    },
+    {
+      "members": [],
+      "class_hash": "0x4f4f208f2ee5fdfa96b881d5a0eae7a5d60d0e40747e7f7ed2e813015f2798e",
+      "tag": "engine-Started",
+      "selector": "0x1b27ea6ce21bfbc7838f75fe481095a93da3665d84343c94a743e2f94a4c60f"
     }
   ]
 }
