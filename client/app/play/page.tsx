@@ -195,6 +195,19 @@ const TicTacToe = () => {
             </div>
           </motion.div>
 
+          <motion.div
+            className="h-8 text-xl text-gray-100"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            key={winner?.winner || isDraw ? "result" : "next"}
+          >
+            {winner
+              ? `Winner: ${winner.winner}`
+              : isDraw
+              ? "Draw!"
+              : `Next player: ${xIsNext ? "X" : "O"}`}
+          </motion.div>
+
           <motion.button
             onClick={resetGame}
             className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 dark:from-red-800 dark:to-red-500 text-white rounded-lg text-lg font-semibold shadow-lg hover:from-orange-600 hover:to-amber-600 dark:hover:from-red-500 dark:hover:to-red-800 transition-colors duration-300"
