@@ -1,0 +1,42 @@
+name: Update Contributors
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  update-contributors:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Update README with Contributors
+        run: |
+          # Get the contributor's info
+          CONTRIBUTOR_NAME="${{ github.event.pull_request.user.login }}"
+          CONTRIBUTOR_AVATAR="${{ github.event.pull_request.user.avatar_url }}"
+          CONTRIBUTOR_PROFILE="${{ github.event.pull_request.user.html_url }}"
+          
+          # Check if Contributors section exists, if not add it
+          if ! grep -q "## Contributors" README.md; then
+            echo -e "\n## Contributors\n" >> README.md
+          fi
+          
+          # Check if contributor already exists
+          if ! grep -q "$CONTRIBUTOR_PROFILE" README.md; then
+            echo -e "<a href=\"$CONTRIBUTOR_PROFILE\"><img src=\"$CONTRIBUTOR_AVATAR\" width=\"50px\" alt=\"$CONTRIBUTOR_NAME\"/></a> " >> README.md
+          fi
+          
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git diff --quiet && git diff --staged --quiet || (git commit -m "docs: update contributors" && git push) 
