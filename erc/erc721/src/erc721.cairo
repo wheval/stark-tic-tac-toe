@@ -75,7 +75,7 @@ mod ERC721 {
         fn mint(ref self: ContractState, recipient: ContractAddress) {
             let mut token_id = self.token_id.read() + 1;
             self.ownable.assert_only_owner();
-            assert_eq!(self.erc721.exists(token_id), false);
+            assert(!self.erc721.exists(token_id), 'NFT with id already exists');
             self.erc721.mint(recipient, token_id);
             self.token_id.write(token_id);
         }
