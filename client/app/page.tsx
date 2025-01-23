@@ -1,101 +1,217 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+
+export default function TicTacToeLanding() {
+  const [gameId, setGameId] = useState("")
+  const [showJoinDialog, setShowJoinDialog] = useState(false)
+
+  const handleCreateGame = () => {
+    console.log("Create custom game")
+  }
+
+  const handleJoinGame = () => {
+    if (showJoinDialog) {
+      console.log("Join game:", gameId)
+      setShowJoinDialog(false)
+      setGameId("")
+    } else {
+      setShowJoinDialog(true)
+    }
+  }
+
+  const handleRandomMatch = () => {
+    console.log("Random matchmaking")
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div className="min-h-screen bg-gradient-to-br from-[#0a192f] via-[#0a192f] to-[#112240] text-white flex flex-col md:flex-row items-center justify-center p-4 md:space-x-12 lg:space-x-44">
+      <GameBoard />
+      <GameControls
+        gameId={gameId}
+        setGameId={setGameId}
+        showJoinDialog={showJoinDialog}
+        handleCreateGame={handleCreateGame}
+        handleJoinGame={handleJoinGame}
+        handleRandomMatch={handleRandomMatch}
+      />
     </div>
-  );
+  )
 }
+
+function GameBoard() {
+  return (
+    <motion.div
+      className="mt-12 relative w-48 h-48"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 1.1, duration: 0.5 }}
+    >
+      <div className="absolute inset-0 grid grid-cols-3 gap-1">
+        {[...Array(9)].map((_, index) => (
+          <GameCell key={index} index={index} />
+        ))}
+      </div>
+      <WinningLine />
+    </motion.div>
+  )
+}
+
+function GameCell({ index }: { index: number }) {
+  if ([0, 4, 5, 7, 8].includes(index)) {
+    return (
+      <motion.span
+        className="flex items-center justify-center text-5xl font-bold mt-3 text-red-600"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ delay: 1.3 + index * 0.1, duration: 0.3 }}
+      >
+        X
+      </motion.span>
+    )
+  } else if ([1, 2, 3, 6].includes(index)) {
+    return (
+      <motion.span
+        className="flex items-center justify-center text-5xl font-bold mt-3 text-pink-400 animate-pulse-slow"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ delay: 1.3 + index * 0.1, duration: 0.3 }}
+      >
+        O
+      </motion.span>
+    )
+  }
+  return <div className="flex items-center justify-center text-5xl font-bold mt-3" />
+}
+
+function WinningLine() {
+  return (
+    <motion.div
+      className="absolute top-0 left-0 w-full h-full"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 3.2, duration: 0.5 }}
+    >
+      <svg className="w-full h-full">
+        <motion.line
+          x1="0"
+          y1="0"
+          x2="100%"
+          y2="100%"
+          stroke="#4ade80"
+          strokeWidth="4"
+          strokeLinecap="round"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ delay: 3.2, duration: 0.8 }}
+        />
+      </svg>
+    </motion.div>
+  )
+}
+
+function GameControls({
+  gameId,
+  setGameId,
+  showJoinDialog,
+  handleCreateGame,
+  handleJoinGame,
+  handleRandomMatch,
+}: {
+  gameId: string
+  setGameId: (id: string) => void
+  showJoinDialog: boolean
+  handleCreateGame: () => void
+  handleJoinGame: () => void
+  handleRandomMatch: () => void
+}) {
+  return (
+    <div className="mt-8 md:mt-0">
+      <motion.h1
+        className="text-4xl sm:text-6xl font-bold mb-4 text-center md:text-left text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600"
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        Tic-Tac-Toe
+      </motion.h1>
+
+      <motion.p
+        className="text-xl sm:text-2xl mb-8 text-red-300 text-center md:text-left"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+      >
+        Classic game, modern twist
+      </motion.p>
+
+      <div className="space-y-4 w-full max-w-lg">
+        <GameButton
+          onClick={handleCreateGame}
+          className="bg-red-500 hover:bg-red-700"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          aria-label="Create Room"
+        >
+          Create Room
+        </GameButton>
+
+        <AnimatePresence>
+          <motion.div
+            className="w-full overflow-hidden"
+            initial={showJoinDialog ? { height: 0 } : { height: "auto" }}
+            animate={showJoinDialog ? { height: "auto" } : { height: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {showJoinDialog && (
+              <input
+                type="text"
+                placeholder="Enter Game ID"
+                value={gameId}
+                onChange={(e) => setGameId(e.target.value)}
+                className="w-full mb-2 py-2 px-4 bg-[#2d3748] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50"
+                autoFocus
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
+
+        <GameButton
+          onClick={handleJoinGame}
+          className="bg-pink-600 hover:bg-pink-700"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
+          aria-label={showJoinDialog ? "Join Game" : "Join Room"}
+        >
+          {showJoinDialog ? "Join" : "Join Room"}
+        </GameButton>
+
+        <GameButton
+          onClick={handleRandomMatch}
+          className="bg-red-600 hover:bg-red-700"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.5 }}
+          aria-label="Play Random Match"
+        >
+          Play
+        </GameButton>
+      </div>
+    </div>
+  )
+}
+
+function GameButton({ children, className, ...props }: React.ComponentProps<typeof motion.button>) {
+  return (
+    <motion.button
+      className={`w-full py-3 px-6 text-white rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-opacity-50 font-bold text-2xl ${className}`}
+      {...props}
+    >
+      {children}
+    </motion.button>
+  )
+}
+
