@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Sparkles } from "lucide-react"
+
 
 export default function TicTacToeLanding() {
   const [gameId, setGameId] = useState("")
@@ -241,6 +241,7 @@ function GameButton({ children, className, ...props }: React.ComponentProps<type
 }
 
 function ParticleBackground() {
+  if (typeof window === "undefined") return null
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {[...Array(50)].map((_, i) => (
