@@ -176,7 +176,7 @@ function GameControls({
           transition={{ delay: 0.9, duration: 0.5 }}
           aria-label="Play Random Match"
         >
-          Play
+          testing
         </GameButton>
       </div>
     </div>
