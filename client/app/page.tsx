@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useClientOnly } from "./hooks/useClientOnly";
+import MusicToggleButton from "./components/MusicToggle";
 
 export default function TicTacToeLanding() {
   const handleCreateGame = () => {
@@ -18,6 +19,7 @@ export default function TicTacToeLanding() {
   };
 
   return (
+
     <div className="min-h-screen bg-gradient-to-br from-[#1a0b2e] via-[#1a0b2e] to-[#2c1250] text-white flex flex-col md:flex-row items-center justify-center p-4 md:space-x-12 lg:space-x-44">
       <ParticleBackground />
       <GameBoard />
@@ -26,6 +28,7 @@ export default function TicTacToeLanding() {
         handleJoinGame={handleJoinGame}
         handleRandomMatch={handleRandomMatch}
       />
+          <MusicToggleButton  />
     </div>
   );
 }
