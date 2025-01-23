@@ -1,31 +1,47 @@
 name: Dojo Contracts CI
 on:
-    push:
-        branches: ["main"]
-    pull_request:
-        branches: ["main"]
+   push:
+       branches: ["main"]
+   pull_request:
+       branches: ["main"]
 jobs:
-    build-and-test:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-            
-            - name: Install Scarb
-              run: |
-                  curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh
-                  echo "/root/.local/bin:$PATH" >> $GITHUB_PATH
-            
-            - name: Install Dojo
-              run: |
-                  curl -L https://install.dojoengine.org | bash
-                  echo "$HOME/.dojo/bin:$PATH" >> $GITHUB_PATH
-            
-            - name: Build contracts
-              run: sozo build
-            
-            - name: Run tests
-              run: sozo test
-            
-            - name: Check formatting
-              run: scarb fmt --check
+   build-and-test:
+       runs-on: ubuntu-latest
+       steps:
+           - name: Install Rust
+             uses: actions-rs/toolchain@v1
+             with:
+                 toolchain: stable
+                 override: true
+           
+           - name: Checkout code
+             uses: actions/checkout@v3
+           
+           - name: Install Scarb
+             run: |
+                 curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh
+                 echo "/root/.local/bin:$PATH" >> $GITHUB_PATH
+           
+           - name: Install Dojo
+             run: |
+                 curl -L https://install.dojoengine.org | bash
+                 echo "$HOME/.dojo/bin:$PATH" >> $GITHUB_PATH
+           
+           - name: Verify Dojo Installation
+             run: |
+                 export PATH="$HOME/.dojo/bin:$PATH"
+                 which sozo
+                 sozo --version
+           
+           - name: Build contracts
+             run: |
+                 export PATH="$HOME/.dojo/bin:$PATH"
+                 sozo build
+           
+           - name: Run tests
+             run: |
+                 export PATH="$HOME/.dojo/bin:$PATH"
+                 sozo test
+           
+           - name: Check formatting
+             run: scarb fmt --check
