@@ -31,11 +31,15 @@ jobs:
            
            - name: Build contracts
              run: |
+                 cd engine
                  sozo build
            
            - name: Run tests
              run: |
+                 cd engine
                  sozo test
            
            - name: Check formatting
-             run: scarb fmt --check
+             run: |
+                cd engine
+                scarb fmt --check
