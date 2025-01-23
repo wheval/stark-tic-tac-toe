@@ -28,7 +28,11 @@ export default function TicTacToeLanding() {
         handleJoinGame={handleJoinGame}
         handleRandomMatch={handleRandomMatch}
       />
-          <MusicToggleButton />
+          <MusicToggleButton style={{
+            position: "absolute",
+            left: "0",
+            right: "0"
+          }} />
     </div>
   );
 }

@@ -11,7 +11,7 @@ interface MusicContextType {
 const MusicContext = createContext<MusicContextType | undefined>(undefined);
 
 export const MusicProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isPlaying, setIsPlaying] = useState(false); // Start with audio paused
+  const [isPlaying, setIsPlaying] = useState(false); 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const musicPath = "/audio/music-for-puzzle-game-146738.mp3";
