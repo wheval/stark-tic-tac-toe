@@ -18,12 +18,12 @@ jobs:
               run: |
                   curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh
                   export PATH="/root/.local/bin:$PATH"
-                  source ~/.bashrc
+                  source /home/runner/.bashrc
 
             - name: Install Dojo
               run: |
                   curl -L https://install.dojoengine.org | bash
-                  source ~/.bashrc
+                  source /home/runner/.bashrc
                   dojoup
 
             - name: Build contracts
