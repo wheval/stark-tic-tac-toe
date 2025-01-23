@@ -20,6 +20,8 @@ jobs:
               run: |
                   curl -L https://install.dojoengine.org | bash
                   echo "$HOME/.dojo/bin:$PATH" >> $GITHUB_PATH
+                  dojoup
+                  echo "$HOME/.dojo/bin:$PATH" >> $GITHUB_PATH
             
             - name: Build contracts
               run: sozo build
