@@ -1,0 +1,35 @@
+name: Dojo Contracts CI
+
+on:
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Install Scarb
+              run: |
+                  curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh
+                  export PATH="/root/.local/bin:$PATH"
+
+            - name: Install Dojo
+              run: |
+                  curl -L https://install.dojoengine.org | bash
+                  export PATH="/root/.dojo/bin:$PATH"
+                  dojoup
+
+            - name: Build contracts
+              run: sozo build
+
+            - name: Run tests
+              run: sozo test
+
+            - name: Check formatting
+              run: scarb fmt --check
