@@ -3,14 +3,23 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useClientOnly } from "./hooks/useClientOnly";
+import MusicToggleButton from "./components/MusicToggle";
+import { JoinRoomModal } from "./components/JoinRoomModal";
 
 export default function TicTacToeLanding() {
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+
   const handleCreateGame = () => {
     console.log("Create custom game");
   };
 
   const handleJoinGame = () => {
-    console.log("Join game");
+    setIsJoinModalOpen(true);
+  };
+
+  const handleJoinRoomSubmit = (roomId: string) => {
+    console.log("Joining room:", roomId);
+    setIsJoinModalOpen(false);
   };
 
   const handleRandomMatch = () => {
@@ -25,6 +34,12 @@ export default function TicTacToeLanding() {
         handleCreateGame={handleCreateGame}
         handleJoinGame={handleJoinGame}
         handleRandomMatch={handleRandomMatch}
+      />
+      <MusicToggleButton />
+      <JoinRoomModal 
+        isOpen={isJoinModalOpen} 
+        onClose={() => setIsJoinModalOpen(false)} 
+        onJoin={handleJoinRoomSubmit}
       />
     </div>
   );
@@ -196,8 +211,6 @@ function GameButton({
 }
 
 function ParticleBackground() {
-  //if (typeof window === "undefined") return null
-
   const isClient = useClientOnly();
   if (!isClient) return null;
 
