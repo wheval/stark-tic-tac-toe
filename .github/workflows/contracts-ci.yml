@@ -28,6 +28,9 @@ jobs:
                 asdf plugin add dojo https://github.com/dojoengine/asdf-dojo
                 asdf install dojo latest 
                 asdf global dojo latest
+                asdf plugin add starknet-foundry
+                asdf install starknet-foundry
+                asdf global starknet-foundry 
            
            - name: Build contracts
              run: |
