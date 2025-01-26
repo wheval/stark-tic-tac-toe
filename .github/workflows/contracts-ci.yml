@@ -60,7 +60,7 @@ jobs:
              run: |
                 cd erc/erc721
                 asdf global scarb 2.8.4
-                asdf global scarb 0.33.0
+                asdf global starknet-foundry 0.33.0
                 scarb build
                 scarb test
                 scarb fmt --check
