@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
 // import Square from './Square';
-import GameBoard from './GameBoard';
-import GameScores from './GameScores';
-import GameStatus from './GameStatus';
+import GameBoard from './components/GameBoard';
+import GameScores from './components/GameScores';
+import GameStatus from './components/GameStatus';
 
 const TicTacToe = () => {
   const [squares, setSquares] = useState<(string | null)[]>(
