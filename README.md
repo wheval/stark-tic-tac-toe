@@ -62,30 +62,36 @@ A fully onchain Tic-Tac-Toe game built on Starknet using the Dojo engine. This p
 1. **Getting Started**
    - Visit the game website
    - Click "Play" to begin
-   <img src="./imgs/home.png" width='700' />
+
+<img src="./imgs/home.png" width='700' />
 
 2. **Start**
    - Players take turns clicking on empty squares to place their symbol
-   <img src="./imgs/01.png" width='700' />
+
+<img src="./imgs/01.png" width='700' />
 
 3. **Making Moves**
    - 'X' goes first, followed by 'O'
    - Player 1 plays as 'X' and Player 2 plays as 'O'
-   <img src="./imgs/02.png" width='700' />
+
+<img src="./imgs/02.png" width='700' />
 
 4. **Winning the Game**
    - Get three of your symbols in a row (horizontally, vertically, or diagonally) to win
    - The game will highlight the winning combination
-   <img src="./imgs/0wins.png" width='700' />
-   <img src="./imgs/Xwins.png" width='700' />
+
+<img src="./imgs/0wins.png" width='700' />
+<img src="./imgs/Xwins.png" width='700' />
 
 5. **Draw**
    - If all squares are filled without a winning combination, the game ends in a draw
-   <img src="./imgs/draw.png" width='700' />
+
+<img src="./imgs/draw.png" width='700' />
 
 6. **Reset Game**
-  To start another round, click "Reset Game"
-   <img src="./imgs/reset.png" width='700' />
+   - To start another round, click "Reset Game"
+
+<img src="./imgs/reset.png" width='700' />
 
 
 
