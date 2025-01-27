@@ -2,7 +2,7 @@
 <img src="./logo.jpg" width='200' />
 </p>
 
-<h1 align="center">  Onchain TicTacToe game </h1>
+<h1 align="center">Onchain TicTacToe game utilizing Dojo Engine</h1>
 
 <p align="center">
   <a href="https://your-build-link-here">
@@ -12,10 +12,10 @@
 
 <p align="center">
   <a href="https://cairo-lang.org">
-    <img src="https://img.shields.io/badge/-%F0%9F%90%AB%20%20Cairo-red?style=for-the-badge&flat&logo=Cairo" alt="Cairo">
+    <img src="https://img.shields.io/badge/-%F0%9F%90%AB%20%20Cairo-black?style=for-the-badge&flat&logo=Cairo" alt="Cairo">
   </a>
   <a href="https://reactjs.org">
-    <img src="https://img.shields.io/badge/-React-blue?style=for-the-badge&flat&logo=react" alt="React">
+    <img src="https://img.shields.io/badge/-React-black?style=for-the-badge&flat&logo=react" alt="React">
   </a>
 </p>
 
