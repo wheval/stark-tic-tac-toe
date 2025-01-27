@@ -10,6 +10,11 @@ pub trait IActions<T> {
     fn read_board(self: @T) -> (Array<Position>, Array<Position>, Array<Position>);
 }
 
+pub trait IVrfProvider<TContractState> {
+    fn request_random(self: @TContractState, caller: ContractAddress, source: Source);
+    fn consume_random(ref self: TContractState, source: Source) -> felt252;
+}
+
 #[dojo::contract]
 pub mod actions {
     use super::{IActions, Position, array_contains_position};
@@ -18,6 +23,16 @@ pub mod actions {
 
     use dojo::model::{ModelStorage};
     use dojo::event::EventStorage;
+
+
+    #[derive(Drop, Copy, Clone, Serde)]
+    pub enum Source {
+        Nonce: ContractAddress,
+        Salt: felt252,
+    }
+
+    // Define the VRF Provider address
+    const VRF_PROVIDER_ADDRESS: starknet::ContractAddress = starknet::contract_address_const::<0x123>();
 
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
@@ -64,7 +79,8 @@ pub mod actions {
 
             if matchmaker.last_board_ready || matchmaker.last_board == 0 {
                 let zero_address: ContractAddress = 0.try_into().unwrap();
-                let match_id = matchmaker.last_board + 1;
+                let random_value = vrf_provider.consume_random(Source::Nonce(player));
+                let match_id = (random_value % 1_000_000) as u32;
                 let mut empty_board: Array<Position> = array![];
                 for i in 1..4_u8 {
                     for j in 1..4_u8 {
@@ -127,8 +143,13 @@ pub mod actions {
 
             let matchmaker: Matchmaker = world.read_model(1);
 
+            let vrf_provider = IVrfProviderDispatcher { contract_address: VRF_PROVIDER_ADDRESS };
+
             let zero_address: ContractAddress = 0.try_into().unwrap();
-            let match_id = matchmaker.last_board + 1;
+
+            let random_value = vrf_provider.consume_random(Source::Nonce(player));
+            let match_id = (random_value % 1_000_000) as u32; 
+            
             let mut empty_board: Array<Position> = array![];
             for i in 1..4_u8 {
                 for j in 1..4_u8 {
