@@ -67,4 +67,5 @@ fn test_mint_not_owner() {
     start_cheat_caller_address(contract_address, caller());
     dispatcher.mint(recipient);
     stop_cheat_caller_address(contract_address);
+
 }
