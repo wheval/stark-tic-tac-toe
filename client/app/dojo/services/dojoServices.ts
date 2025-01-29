@@ -54,16 +54,11 @@ export class DojoService {
             throw error;
         }
     }
-
+    
     async mark(position: Position) {
         try {
-            const dojoPosition = this.toDojoPosition(position);
-            const result = await this.world.actions.mark(this.account, dojoPosition);
+            const result = await this.world.actions.mark(this.account, position);
             console.log("Marked position:", result);
-            
-            const [empty, x, o] = await this.readBoard();
-            useGameStore.getState().updateBoardFromContract(empty, x, o);
-            
             return result;
         } catch (error) {
             console.error("Error marking position:", error);

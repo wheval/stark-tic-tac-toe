@@ -5,6 +5,7 @@ import { Account, RpcProvider, ec, stark } from 'starknet';
 import { DojoProvider } from "@dojoengine/core";
 import { DojoService } from '../dojo/services/dojoServices';
 import { useGameStore, Position } from '../stores/state';
+import worldABI from '../../WORLD_ABI.json';
 
 export default function PlayPage() {
     const [account, setAccount] = useState<Account | null>(null);
@@ -17,18 +18,24 @@ export default function PlayPage() {
 
     const setupStarknet = async () => {
         try {
-            // RPC Provider
+            
+            const manifest = {
+                world: {
+                    address: process.env.NEXT_PUBLIC_WORLD_ADDRESS,
+                    abi: worldABI
+                }
+            };
+            
             const rpcProvider = new RpcProvider({
                 nodeUrl: process.env.NEXT_PUBLIC_STARKNET_RPC_URL || 'https://starknet-goerli.public.blastapi.io/rpc/v0_6'
             });
 
-            // generate random private key
+            const rpcUrl = process.env.NEXT_PUBLIC_STARKNET_RPC_URL || 'https://starknet-goerli.public.blastapi.io/rpc/v0_6';
+
             const privateKey = stark.randomAddress();
             
-            // derive public key
             const publicKey = ec.starkCurve.getStarkKey(privateKey);
             
-            // create account
             const account = new Account(
                 rpcProvider, 
                 publicKey, 
@@ -36,20 +43,14 @@ export default function PlayPage() {
             );
             setAccount(account);
 
-            // setup dojo provider
             const dojoProvider = new DojoProvider(
-                {
-                    rpcUrl: process.env.NEXT_PUBLIC_STARKNET_RPC_URL || 'https://starknet-goerli.public.blastapi.io/rpc/v0_6',
-                    toriiUrl: process.env.NEXT_PUBLIC_TORII_URL || '',
-                    worldAddress: process.env.NEXT_PUBLIC_WORLD_ADDRESS || ''
-                }
+                manifest, 
+                rpcUrl
             );
 
-            // create dojo service
             const service = new DojoService(dojoProvider, account);
             setDojoService(service);
 
-            // update store with account address
             gameStore.setAddress(account.address);
         } catch (error) {
             console.error('Starknet setup error:', error);
@@ -69,7 +70,6 @@ export default function PlayPage() {
             alert('Please wait for account setup');
             return;
         }
-        // hardcoded match ID for testing
         await dojoService.join(1);
     };
 
@@ -79,7 +79,6 @@ export default function PlayPage() {
             return;
         }
         
-        // use local Position type
         const position: Position = { i: 1, j: 1 };
         await dojoService.mark(position);
     };
