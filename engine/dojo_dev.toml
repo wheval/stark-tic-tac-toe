@@ -20,4 +20,4 @@ private_key = "0xc5b2fcab997346f3ea1c00b002ecf6f382c5f9c9659a3894eb783c5320f912"
 world_address = "0x050d7fc5593c05018872173d900886b503ff2510fb8ac5962b2513429b2431c2"
 
 [writers]
-"engine" = ["engine-actions"]
+"engine" = ["engine-leave", "engine-play", "engine-read_board", "engine-start"]
