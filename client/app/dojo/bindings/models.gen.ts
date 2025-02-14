@@ -1,5 +1,4 @@
 import type { SchemaType as ISchemaType } from "@dojoengine/sdk";
-import { init } from "@dojoengine/sdk";
 
 import { BigNumberish } from 'starknet';
 
@@ -71,17 +70,6 @@ export interface SchemaType extends ISchemaType {
 		Position: WithFieldOrder<Position>,
 	},
 }
-
-export interface MockSchemaType {
-	[namespace: string]: {
-		[model: string]: {
-			fieldOrder: string[];
-			[field: string]: unknown; 
-		};
-	};
-}
-
-
 export const schema: SchemaType = {
 	engine: {
 		Board: {
@@ -89,7 +77,7 @@ export const schema: SchemaType = {
 			match_id: 0,
 			x: "",
 			o: "",
-			empty: [],
+			empty: [{ fieldOrder: ['i', 'j'], i: 0, j: 0, }],
 			winner: "",
 			active: false,
 			ready: false,
@@ -98,7 +86,7 @@ export const schema: SchemaType = {
 			fieldOrder: ['x', 'o', 'empty', 'winner', 'active', 'ready'],
 			x: "",
 			o: "",
-			empty: [],
+			empty: [{ fieldOrder: ['i', 'j'], i: 0, j: 0, }],
 			winner: "",
 			active: false,
 			ready: false,
@@ -118,13 +106,13 @@ export const schema: SchemaType = {
 			fieldOrder: ['address', 'match_id', 'marks', 'turn'],
 			address: "",
 			match_id: 0,
-			marks: [],
+			marks: [{ fieldOrder: ['i', 'j'], i: 0, j: 0, }],
 			turn: false,
 		},
 		PlayerValue: {
 			fieldOrder: ['match_id', 'marks', 'turn'],
 			match_id: 0,
-			marks: [],
+			marks: [{ fieldOrder: ['i', 'j'], i: 0, j: 0, }],
 			turn: false,
 		},
 		Position: {
@@ -143,21 +131,3 @@ export enum ModelsMapping {
 	PlayerValue = 'engine-PlayerValue',
 	Position = 'engine-Position',
 }
-
-export const db = await init<MockSchemaType>(
-	{
-		client: {
-			rpcUrl: "your-rpc-url",
-            toriiUrl: "your-torii-url",
-            relayUrl: "your-relay-url",
-            worldAddress: "your-world-address",
-		},
-		domain: {
-			name: "Example",
-            version: "1.0",
-            chainId: "your-chain-id",
-            revision: "1",
-		}
-	},
-	schema
-)
