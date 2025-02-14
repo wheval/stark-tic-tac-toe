@@ -106,8 +106,8 @@ pub mod start {
 
             let zero_address: ContractAddress = 0.try_into().unwrap();
 
-            let match_id: u32 = 123456; 
-            
+            let match_id: u32 = 123456;
+
             let mut empty_board: Array<Position> = array![];
             for i in 1..4_u8 {
                 for j in 1..4_u8 {
