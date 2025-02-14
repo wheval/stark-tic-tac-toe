@@ -1,5 +1,4 @@
 use engine::models::{Position};
-use starknet::ContractAddress;
 
 #[starknet::interface]
 pub trait IPlay<T> {
@@ -10,8 +9,7 @@ pub trait IPlay<T> {
 pub mod play {
     use super::{IPlay, Position, array_contains_position};
     use starknet::{ContractAddress, get_caller_address};
-    use engine::models::{Matchmaker, Board, Player};
-    use engine::interface::{IVrfProviderDispatcher, IVrfProvider};
+    use engine::models::{Board, Player};
 
     use dojo::model::{ModelStorage};
     use dojo::event::EventStorage;
@@ -23,6 +21,15 @@ pub mod play {
         pub player: ContractAddress,
         pub position: Position,
         pub symbol: bool,
+    }
+
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    pub struct Ended {
+        #[key]
+        pub match_id: u32,
+        pub winner: ContractAddress,
+        pub finished: bool,
     }
 
     #[abi(embed_v0)]
@@ -149,6 +156,31 @@ pub mod play {
     impl InternalImpl of InternalTrait {
         fn world_default(self: @ContractState) -> dojo::world::WorldStorage {
             self.world(@"engine")
+        }
+
+        fn end(ref self: ContractState, match_id: u32, winner: ContractAddress, finished: bool) {
+            let mut world = self.world_default();
+
+            let board: Board = world.read_model(match_id);
+
+            let new_board = Board {
+                match_id: board.match_id,
+                x: board.x,
+                o: board.o,
+                empty: board.empty,
+                winner,
+                active: false,
+                ready: true,
+            };
+
+            let player_x = Player { address: board.x, match_id: 0, marks: array![], turn: false };
+
+            let player_o = Player { address: board.o, match_id: 0, marks: array![], turn: false };
+
+            world.write_model(@new_board);
+            world.write_model(@player_x);
+            world.write_model(@player_o);
+            world.emit_event(@Ended { match_id: board.match_id, winner, finished });
         }
     }
 }

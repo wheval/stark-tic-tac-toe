@@ -1,5 +1,4 @@
 use engine::models::{Position};
-use starknet::ContractAddress;
 
 #[starknet::interface]
 pub trait IStart<T> {
@@ -8,18 +7,11 @@ pub trait IStart<T> {
     fn join(ref self: T, match_id: u32);
 }
 
-#[derive(Drop, Copy, Clone, Serde)]
-pub enum Source {
-    Nonce: ContractAddress,
-    Salt: felt252,
-}
-
 #[dojo::contract]
 pub mod start {
-    use super::{IStart, Position, Source};
+    use super::{IStart, Position};
     use starknet::{ContractAddress, get_caller_address};
     use engine::models::{Matchmaker, Board, Player};
-    use engine::interface::{IVrfProviderDispatcher, IVrfProvider};
 
     use dojo::model::{ModelStorage};
     use dojo::event::EventStorage;
@@ -49,14 +41,9 @@ pub mod start {
 
             let matchmaker: Matchmaker = world.read_model(1);
 
-            let VRF_PROVIDER_ADDRESS: ContractAddress = 0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f.try_into().unwrap();
-
-            let vrf_provider = IVrfProviderDispatcher { contract_address: VRF_PROVIDER_ADDRESS };
-
             if matchmaker.last_board_ready || matchmaker.last_board == 0 {
                 let zero_address: ContractAddress = 0.try_into().unwrap();
-                let random_value = vrf_provider.consume_random(Source::Nonce(player));
-                let match_id: u32 = (random_value % 1000000);
+                let match_id: u32 = 123456;
                 let mut empty_board: Array<Position> = array![];
                 for i in 1..4_u8 {
                     for j in 1..4_u8 {
@@ -117,16 +104,9 @@ pub mod start {
             let mut world = self.world_default();
             let player = get_caller_address();
 
-            let matchmaker: Matchmaker = world.read_model(1);
-
-            let VRF_PROVIDER_ADDRESS: ContractAddress = 0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f.try_into().unwrap();
-
-            let vrf_provider = IVrfProviderDispatcher { contract_address: VRF_PROVIDER_ADDRESS };
-
             let zero_address: ContractAddress = 0.try_into().unwrap();
 
-            let random_value = vrf_provider.consume_random(Source::Nonce(player));
-            let match_id: u32 = (random_value % 1000000); 
+            let match_id: u32 = 123456; 
             
             let mut empty_board: Array<Position> = array![];
             for i in 1..4_u8 {

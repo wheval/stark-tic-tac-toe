@@ -1,5 +1,4 @@
 use engine::models::{Position};
-use starknet::ContractAddress;
 
 #[starknet::interface]
 pub trait IReadBoard<T> {
@@ -9,12 +8,10 @@ pub trait IReadBoard<T> {
 #[dojo::contract]
 pub mod read_board {
     use super::{IReadBoard, Position};
-    use starknet::{ContractAddress, get_caller_address};
-    use engine::models::{Matchmaker, Board, Player};
-    use engine::interface::{IVrfProviderDispatcher, IVrfProvider};
+    use starknet::{get_caller_address};
+    use engine::models::{Board, Player};
 
     use dojo::model::{ModelStorage};
-    use dojo::event::EventStorage;
 
     #[abi(embed_v0)]
     impl ActionsImpl of IReadBoard<ContractState> {

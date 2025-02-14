@@ -1,6 +1,3 @@
-use engine::models::{Position};
-use starknet::ContractAddress;
-
 #[starknet::interface]
 pub trait ILeave<T> {
     fn leave(ref self: T);
@@ -8,10 +5,9 @@ pub trait ILeave<T> {
 
 #[dojo::contract]
 pub mod leave {
-    use super::{ILeave, Position};
+    use super::{ILeave};
     use starknet::{ContractAddress, get_caller_address};
-    use engine::models::{Matchmaker, Board, Player};
-    use engine::interface::{IVrfProviderDispatcher, IVrfProvider};
+    use engine::models::{Board, Player};
 
     use dojo::model::{ModelStorage};
     use dojo::event::EventStorage;

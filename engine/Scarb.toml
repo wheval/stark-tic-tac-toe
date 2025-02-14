@@ -14,8 +14,6 @@ move = "sozo execute dojo_starter-actions move -c 1 --wait" # scarb run move
 
 [dependencies]
 dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.9" }
-pragma_lib = { git = "https://github.com/astraly-labs/pragma-lib", tag = "2.8.2" }
-
 
 [[target.starknet-contract]]
 build-external-contracts = ["dojo::world::world_contract::world"]
