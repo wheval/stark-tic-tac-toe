@@ -1,7 +1,7 @@
 use starknet::{ContractAddress, contract_address_const};
 use snforge_std::{declare, ContractClassTrait, DeclareResultTrait, start_cheat_caller_address};
 use openzeppelin::utils::serde::SerializedAppend;
-use erc20::erc20::{IERC20Dispatcher,IERC20DispatcherTrait};
+use erc20::erc20::{IERC20Dispatcher, IERC20DispatcherTrait};
 
 fn NAME() -> ByteArray {
     "TicTacToeERC20"
@@ -93,7 +93,7 @@ fn test_approve() {
     let (contract_address, erc2Dispatcher) = __deploy_contract__();
 
     let amount: u256 = 1000;
-    start_cheat_caller_address(contract_address,OWNER());
+    start_cheat_caller_address(contract_address, OWNER());
     erc2Dispatcher.approve(SPENDER(), amount);
 
     assert(erc2Dispatcher.allowance(OWNER(), SPENDER()) > 0, 'Incorrect Allowance');
@@ -103,7 +103,7 @@ fn test_approve() {
 #[test]
 fn test_transfer() {
     let (contract_address, erc2Dispatcher) = __deploy_contract__();
-    
+
     let amount: u256 = 5000;
 
     start_cheat_caller_address(contract_address, MINT_TO());
@@ -117,7 +117,7 @@ fn test_transfer() {
 #[test]
 fn test_transfer_from() {
     let (contract_address, erc2Dispatcher) = __deploy_contract__();
-    
+
     let amount: u256 = 5000;
 
     start_cheat_caller_address(contract_address, MINT_TO());

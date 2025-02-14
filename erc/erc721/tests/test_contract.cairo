@@ -7,7 +7,7 @@ use openzeppelin::token::erc721::interface::{IERC721Dispatcher, IERC721Dispatche
 use erc::erc721::{IERC721Dispatcher as NFTDispatcher, IERC721DispatcherTrait as NFTDispatcherTrait};
 use snforge_std::{
     declare, ContractClassTrait, DeclareResultTrait, start_cheat_caller_address,
-    stop_cheat_caller_address
+    stop_cheat_caller_address,
 };
 
 // Account functions
@@ -67,5 +67,4 @@ fn test_mint_not_owner() {
     start_cheat_caller_address(contract_address, caller());
     dispatcher.mint(recipient);
     stop_cheat_caller_address(contract_address);
-
 }
