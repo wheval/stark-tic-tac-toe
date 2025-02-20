@@ -10,7 +10,9 @@ pub trait IStart<T> {
 #[dojo::contract]
 pub mod start {
     use super::{IStart, Position};
-    use starknet::{ContractAddress, get_caller_address};
+    use core::poseidon::PoseidonTrait;
+    use core::hash::HashStateTrait;
+    use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
     use engine::models::{Matchmaker, Board, Player};
 
     use dojo::model::{ModelStorage};
@@ -106,7 +108,7 @@ pub mod start {
 
             let zero_address: ContractAddress = 0.try_into().unwrap();
 
-            let match_id: u32 = 123456;
+            let match_id: u32 = self._generate_match_id(player, world);
 
             let mut empty_board: Array<Position> = array![];
             for i in 1..4_u8 {
@@ -173,6 +175,30 @@ pub mod start {
     impl InternalImpl of InternalTrait {
         fn world_default(self: @ContractState) -> dojo::world::WorldStorage {
             self.world(@"engine")
+        }
+
+        // Hash caller address with current block timestamp to generate match id, ensure uniqueness
+        // and no u32 overflow
+        fn _generate_match_id(
+            self: @ContractState, caller: ContractAddress, world: dojo::world::WorldStorage,
+        ) -> u32 {
+            let timestamp = get_block_timestamp();
+            let hash: u256 = PoseidonTrait::new()
+                .update(caller.into())
+                .update(timestamp.into())
+                .finalize()
+                .try_into()
+                .unwrap();
+
+            let mut id: u32 = (hash % 0x100000000_u256) //  0x100000000 = u32::MAX + 1
+                .try_into()
+                .unwrap();
+            let board: Board = world.read_model(id);
+
+            if board.active {
+                return ((id + 1).into() % 0x100000000_u256).try_into().unwrap();
+            }
+            id
         }
     }
 }
