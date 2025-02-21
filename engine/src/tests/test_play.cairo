@@ -27,7 +27,8 @@ mod tests {
                 TestResource::Event(play::e_Ended::TEST_CLASS_HASH),
                 TestResource::Event(start::e_Created::TEST_CLASS_HASH),
                 TestResource::Event(start::e_Started::TEST_CLASS_HASH),
-            ].span()
+            ]
+                .span()
         };
 
         ndef
@@ -40,8 +41,9 @@ mod tests {
             ContractDefTrait::new(@"engine", @"start")
                 .with_writer_of([dojo::utils::bytearray_hash(@"engine")].span()),
             ContractDefTrait::new(@"engine", @"read_board")
-                .with_writer_of([dojo::utils::bytearray_hash(@"engine")].span())
-        ].span()
+                .with_writer_of([dojo::utils::bytearray_hash(@"engine")].span()),
+        ]
+            .span()
     }
 
     #[derive(Drop, Copy)]
@@ -49,7 +51,7 @@ mod tests {
         pub world: WorldStorage,
         pub play_dispatcher: IPlayDispatcher,
         pub start_dispatcher: IStartDispatcher,
-        pub board_dispatcher: IReadBoardDispatcher
+        pub board_dispatcher: IReadBoardDispatcher,
     }
 
     fn setup_world() -> GameContext {
