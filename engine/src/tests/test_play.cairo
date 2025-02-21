@@ -16,7 +16,7 @@ mod tests {
 
     fn namespace_def() -> NamespaceDef {
         let ndef = NamespaceDef {
-            namespace: "engine", 
+            namespace: "engine",
             resources: [
                 TestResource::Model(m_Board::TEST_CLASS_HASH),
                 TestResource::Model(m_Player::TEST_CLASS_HASH),
