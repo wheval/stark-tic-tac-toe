@@ -16,7 +16,8 @@ mod tests {
 
     fn namespace_def() -> NamespaceDef {
         let ndef = NamespaceDef {
-            namespace: "engine", resources: [
+            namespace: "engine", 
+            resources: [
                 TestResource::Model(m_Board::TEST_CLASS_HASH),
                 TestResource::Model(m_Player::TEST_CLASS_HASH),
                 TestResource::Model(m_Matchmaker::TEST_CLASS_HASH),
@@ -28,7 +29,7 @@ mod tests {
                 TestResource::Event(start::e_Created::TEST_CLASS_HASH),
                 TestResource::Event(start::e_Started::TEST_CLASS_HASH),
             ]
-                .span()
+                .span(),
         };
 
         ndef
