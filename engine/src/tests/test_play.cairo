@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use dojo::event::EventStorageTest;
-use dojo_cairo_test::WorldStorageTestTrait;
+    use dojo_cairo_test::WorldStorageTestTrait;
     use dojo::model::{ModelStorage, ModelValueStorage, ModelStorageTest};
     use dojo::world::{WorldStorage, WorldStorageTrait};
     use dojo_cairo_test::{
@@ -80,8 +80,8 @@ use dojo_cairo_test::WorldStorageTestTrait;
         (player_1, player_2)
     }
 
-     /// Utility function that feigns a gameplay, allowing player 2 win
-     fn feign_win(players: Array<ContractAddress>, context: GameContext) {
+    /// Utility function that feigns a gameplay, allowing player 2 win
+    fn feign_win(players: Array<ContractAddress>, context: GameContext) {
         let (mut available_positions, _, _) = context.board_dispatcher.read_board();
 
         // make five moves for both players to win a game
@@ -136,58 +136,57 @@ use dojo_cairo_test::WorldStorageTestTrait;
         let event = play::Ended { match_id: 12345, winner: player_2, finished: true };
         context.world.emit_event_test(@event);
     }
-
     // #[test]
-    // #[should_panic(expected: 'Match no longer Active')]
-    // fn test_play_mark_should_panic_for_invalid_player() {
-    //     // From the code implementation, this error message is inevitable for this scenario
-    //     let context = setup_world();
-    //     let (_, _) = init_default_game(context.start_dispatcher);
+// #[should_panic(expected: 'Match no longer Active')]
+// fn test_play_mark_should_panic_for_invalid_player() {
+//     // From the code implementation, this error message is inevitable for this scenario
+//     let context = setup_world();
+//     let (_, _) = init_default_game(context.start_dispatcher);
 
     //     let invalid_player = contract_address_const::<'INVALID PLAYER'>();
-    //     testing::set_contract_address(invalid_player);
-    //     let position = Position { i: 2, j: 2 };
-    //     context.play_dispatcher.mark(position);
-    // }
+//     testing::set_contract_address(invalid_player);
+//     let position = Position { i: 2, j: 2 };
+//     context.play_dispatcher.mark(position);
+// }
 
     // #[test]
-    // #[should_panic(expected: 'Position already marked')]
-    // fn test_play_mark_should_panic_on_already_marked_position() {
-    //     let context = setup_world();
-    //     let (player_1, player_2) = init_default_game(context.start_dispatcher);
-    //     let position = Position { i: 2, j: 2 };
-    //     testing::set_contract_address(player_2);
-    //     context.play_dispatcher.mark(position);
+// #[should_panic(expected: 'Position already marked')]
+// fn test_play_mark_should_panic_on_already_marked_position() {
+//     let context = setup_world();
+//     let (player_1, player_2) = init_default_game(context.start_dispatcher);
+//     let position = Position { i: 2, j: 2 };
+//     testing::set_contract_address(player_2);
+//     context.play_dispatcher.mark(position);
 
     //     testing::set_contract_address(player_1);
-    //     context.play_dispatcher.mark(position); // should panic
-    // }
+//     context.play_dispatcher.mark(position); // should panic
+// }
 
     // #[test]
-    // #[should_panic(expected: 'Not your turn')]
-    // fn test_play_should_panic_on_player_misturn() {
-    //     let context = setup_world();
-    //     let (player_1, player_2) = init_default_game(context.start_dispatcher);
-    //     let position = Position { i: 2, j: 2 };
-    //     testing::set_contract_address(player_2);
-    //     context.play_dispatcher.mark(position);
+// #[should_panic(expected: 'Not your turn')]
+// fn test_play_should_panic_on_player_misturn() {
+//     let context = setup_world();
+//     let (player_1, player_2) = init_default_game(context.start_dispatcher);
+//     let position = Position { i: 2, j: 2 };
+//     testing::set_contract_address(player_2);
+//     context.play_dispatcher.mark(position);
 
     //     let position = Position { i: 1, j: 1 };
-    //     testing::set_contract_address(player_1);
-    //     context.play_dispatcher.mark(position);
+//     testing::set_contract_address(player_1);
+//     context.play_dispatcher.mark(position);
 
     //     let position = Position { i: 2, j: 1 };
-    //     context.play_dispatcher.mark(position);
-    // }
+//     context.play_dispatcher.mark(position);
+// }
 
     // #[test]
-    // #[should_panic(expected: 'Match no longer Active')]
-    // fn test_play_should_panic_on_match_ended() {
-    //     let context = setup_world();
-    //     let (player_1, player_2) = init_default_game(context.start_dispatcher);
-    //     feign_win(array![player_1, player_2], context);
-    //     // since player 2 has won, let player 1 make a move
-    //     let position = Position { i: 3, j: 1 };
-    //     context.play_dispatcher.mark(position);
-    // }
+// #[should_panic(expected: 'Match no longer Active')]
+// fn test_play_should_panic_on_match_ended() {
+//     let context = setup_world();
+//     let (player_1, player_2) = init_default_game(context.start_dispatcher);
+//     feign_win(array![player_1, player_2], context);
+//     // since player 2 has won, let player 1 make a move
+//     let position = Position { i: 3, j: 1 };
+//     context.play_dispatcher.mark(position);
+// }
 }
