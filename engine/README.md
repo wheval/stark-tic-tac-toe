@@ -26,6 +26,22 @@ Read the full tutorial [here](https://dojoengine.org/tutorial/dojo-starter).
 
 ## Running Locally
 
+
+#### Prerequisites
+
+**_Ensure you have the prerequisites installed before proceeding.
+Check [here](https://book.dojoengine.org/getting-started#prerequisites) for guide on how to install the prerequisites._**
+
+1. [Install Dojo](https://book.dojoengine.org/getting-started#install-dojo-using-dojoup)
+
+```bash
+# Install dojoup
+curl -L https://install.dojoengine.org | bash
+
+# Install Dojo release
+dojoup --version v1.2.1
+```
+
 #### Terminal one (Make sure this is running)
 
 ```bash
