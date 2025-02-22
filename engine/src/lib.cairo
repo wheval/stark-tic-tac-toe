@@ -9,4 +9,5 @@ mod models;
 
 pub mod tests {
     pub mod test_play;
+    pub mod test_read_board;
 }
