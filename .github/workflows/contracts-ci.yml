@@ -52,8 +52,8 @@ jobs:
            - name: ERC20
              run: |
                 cd erc/erc20
-                asdf global scarb 2.8.4
-                asdf global starknet-foundry 0.33.0
+                asdf global scarb 2.9.4
+                asdf global starknet-foundry 0.37.0
                 scarb build
                 scarb test
                 scarb fmt --check
