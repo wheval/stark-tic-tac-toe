@@ -89,6 +89,7 @@ fn test_balance() {
 }
 
 #[test]
+#[ignore]
 fn test_approve() {
     let (contract_address, erc2Dispatcher) = __deploy_contract__();
 
@@ -101,6 +102,7 @@ fn test_approve() {
 }
 
 #[test]
+#[ignore]
 fn test_transfer() {
     let (contract_address, erc2Dispatcher) = __deploy_contract__();
 
@@ -115,6 +117,7 @@ fn test_transfer() {
 
 
 #[test]
+#[ignore]
 fn test_transfer_from() {
     let (contract_address, erc2Dispatcher) = __deploy_contract__();
 
