@@ -1,6 +1,6 @@
+import GameResult from '@/app/models/GameResult';
+import connectDB from '@/app/utils/db';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import connectDB from '../utils/db';
-import GameResult from '../models/GameResult';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectDB();
