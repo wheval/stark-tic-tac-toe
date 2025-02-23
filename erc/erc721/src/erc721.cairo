@@ -1,14 +1,8 @@
-use starknet::ContractAddress;
-
-#[starknet::interface]
-pub trait IERC721<TContractState> {
-    fn mint(ref self: TContractState, recipient: ContractAddress);
-}
+// SPDX-License-Identifier: MIT
+// Compatible with OpenZeppelin Contracts for Cairo ^0.20.0
 
 #[starknet::contract]
 mod ERC721 {
-    use starknet::storage::StoragePointerWriteAccess;
-    use starknet::storage::StoragePointerReadAccess;
     use openzeppelin::access::ownable::OwnableComponent;
     use openzeppelin::introspection::src5::SRC5Component;
     use openzeppelin::token::erc721::{ERC721Component, ERC721HooksEmptyImpl};
@@ -42,7 +36,6 @@ mod ERC721 {
         ownable: OwnableComponent::Storage,
         #[substorage(v0)]
         upgradeable: UpgradeableComponent::Storage,
-        token_id: u256,
     }
 
     #[event]
@@ -59,32 +52,40 @@ mod ERC721 {
     }
 
     #[constructor]
-    fn constructor(
-        ref self: ContractState,
-        owner: ContractAddress,
-        token_name: ByteArray,
-        token_symbol: ByteArray,
-        base_uri: ByteArray,
-    ) {
-        self.erc721.initializer(token_name, token_symbol, base_uri);
+    fn constructor(ref self: ContractState, owner: ContractAddress) {
+        self.erc721.initializer("ERC721", "", "");
         self.ownable.initializer(owner);
     }
 
-    #[abi(embed_v0)]
-    impl IERC721Impl of super::IERC721<ContractState> {
-        fn mint(ref self: ContractState, recipient: ContractAddress) {
-            let mut token_id = self.token_id.read() + 1;
+    #[generate_trait]
+    #[abi(per_item)]
+    impl ExternalImpl of ExternalTrait {
+        #[external(v0)]
+        fn safe_mint(
+            ref self: ContractState,
+            recipient: ContractAddress,
+            token_id: u256,
+            data: Span<felt252>,
+        ) {
             self.ownable.assert_only_owner();
-            assert(!self.erc721.exists(token_id), 'NFT with id already exists');
-            self.erc721.mint(recipient, token_id);
-            self.token_id.write(token_id);
+            self.erc721.safe_mint(recipient, token_id, data);
+        }
+
+        #[external(v0)]
+        fn safeMint(
+            ref self: ContractState,
+            recipient: ContractAddress,
+            tokenId: u256,
+            data: Span<felt252>,
+        ) {
+            self.safe_mint(recipient, tokenId, data);
         }
     }
 
     //
     // Upgradeable
     //
-
+    
     #[abi(embed_v0)]
     impl UpgradeableImpl of IUpgradeable<ContractState> {
         fn upgrade(ref self: ContractState, new_class_hash: ClassHash) {
@@ -92,5 +93,4 @@ mod ERC721 {
             self.upgradeable.upgrade(new_class_hash);
         }
     }
-    /// TODO: when testing, check if the token_uri corresponds with the BASE_URI + token_id
 }
