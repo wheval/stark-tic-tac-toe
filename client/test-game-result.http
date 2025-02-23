@@ -1,0 +1,48 @@
+### Test POST Game Result
+POST http://localhost:3000/api/game-results
+Content-Type: application/json
+
+{
+  "player1": {
+    "address": "0x123...abc",
+    "symbol": "X"
+  },
+  "player2": {
+    "address": "0x456...def",
+    "symbol": "O"
+  },
+  "winner": "0x123...abc",
+  "moves": [
+    {
+      "position": 0,
+      "player": "0x123...abc",
+      "symbol": "X"
+    },
+    {
+      "position": 4,
+      "player": "0x456...def",
+      "symbol": "O"
+    },
+    {
+      "position": 1,
+      "player": "0x123...abc",
+      "symbol": "X"
+    },
+    {
+      "position": 3,
+      "player": "0x456...def",
+      "symbol": "O"
+    },
+    {
+      "position": 2,
+      "player": "0x123...abc",
+      "symbol": "X"
+    }
+  ],
+  "startTime": "2024-02-22T10:00:00Z",
+  "endTime": "2024-02-22T10:01:30Z",
+  "status": "completed"
+}
+
+### Test GET Game Results
+GET http://localhost:3000/api/game-results 
