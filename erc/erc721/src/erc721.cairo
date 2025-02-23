@@ -17,7 +17,9 @@ mod ERC721 {
     component!(path: SRC5Component, storage: src5, event: SRC5Event);
     component!(path: PausableComponent, storage: pausable, event: PausableEvent);
     component!(path: OwnableComponent, storage: ownable, event: OwnableEvent);
-    component!(path: ERC721EnumerableComponent, storage: erc721_enumerable, event: ERC721EnumerableEvent);
+    component!(
+        path: ERC721EnumerableComponent, storage: erc721_enumerable, event: ERC721EnumerableEvent,
+    );
     component!(path: UpgradeableComponent, storage: upgradeable, event: UpgradeableEvent);
 
     // External
@@ -28,7 +30,8 @@ mod ERC721 {
     #[abi(embed_v0)]
     impl OwnableMixinImpl = OwnableComponent::OwnableMixinImpl<ContractState>;
     #[abi(embed_v0)]
-    impl ERC721EnumerableImpl = ERC721EnumerableComponent::ERC721EnumerableImpl<ContractState>;
+    impl ERC721EnumerableImpl =
+        ERC721EnumerableComponent::ERC721EnumerableImpl<ContractState>;
 
     // Internal
     impl ERC721InternalImpl = ERC721Component::InternalImpl<ContractState>;
@@ -89,7 +92,7 @@ mod ERC721 {
             contract_state.erc721_enumerable.before_update(to, token_id);
         }
     }
-    
+
     #[generate_trait]
     #[abi(per_item)]
     impl ExternalImpl of ExternalTrait {
@@ -123,10 +126,7 @@ mod ERC721 {
 
         #[external(v0)]
         fn safeMint(
-            ref self: ContractState,
-            recipient: ContractAddress,
-            tokenId: u256,
-            data: Span<felt252>,
+            ref self: ContractState, recipient: ContractAddress, tokenId: u256, data: Span<felt252>,
         ) {
             self.safe_mint(recipient, tokenId, data);
         }
@@ -135,7 +135,7 @@ mod ERC721 {
     //
     // Upgradeable
     //
-    
+
     #[abi(embed_v0)]
     impl UpgradeableImpl of IUpgradeable<ContractState> {
         fn upgrade(ref self: ContractState, new_class_hash: ClassHash) {
