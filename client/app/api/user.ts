@@ -1,4 +1,3 @@
-//import connectDB from "@/lib/mongodb";
 import connectDB from '../utils/db';
 import User from '../models/user';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -24,6 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       return res.status(201).json({ message: "User created successfully", user: newUser });
     } catch (error) {
+      console.error("Error creating user:", error); // ✅ Using the error variable
       return res.status(500).json({ error: "Internal Server Error" });
     }
   } else {
