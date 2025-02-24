@@ -27,7 +27,7 @@ mod tests {
                 TestResource::Event(start::e_Created::TEST_CLASS_HASH),
                 TestResource::Event(start::e_Started::TEST_CLASS_HASH),
             ]
-            .span(),
+                .span(),
         };
         ndef
     }
@@ -41,7 +41,7 @@ mod tests {
             ContractDefTrait::new(@"engine", @"read_board")
                 .with_writer_of([dojo::utils::bytearray_hash(@"engine")].span()),
         ]
-        .span()
+            .span()
     }
 
     #[derive(Drop, Copy)]
