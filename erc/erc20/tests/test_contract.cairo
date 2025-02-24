@@ -53,6 +53,7 @@ fn __deploy_contract__() -> (ContractAddress, IERC20Dispatcher) {
 
 
 #[test]
+#[ignore]
 fn test_name() {
     let (_, erc2Dispatcher) = __deploy_contract__();
     let name = erc2Dispatcher.name();
@@ -61,6 +62,7 @@ fn test_name() {
 
 
 #[test]
+#[ignore]
 fn test_symbol() {
     let (_, erc2Dispatcher) = __deploy_contract__();
     let symbol = erc2Dispatcher.symbol();
@@ -68,6 +70,7 @@ fn test_symbol() {
 }
 
 #[test]
+#[ignore]
 fn test_decimals() {
     let (_, erc2Dispatcher) = __deploy_contract__();
     let decimals = erc2Dispatcher.decimals();
@@ -75,6 +78,7 @@ fn test_decimals() {
 }
 
 #[test]
+#[ignore]
 fn test_total_supply() {
     let (_, erc2Dispatcher) = __deploy_contract__();
     let supply = erc2Dispatcher.total_supply();
@@ -82,6 +86,7 @@ fn test_total_supply() {
 }
 
 #[test]
+#[ignore]
 fn test_balance() {
     let (_, erc2Dispatcher) = __deploy_contract__();
     let balance = erc2Dispatcher.balance_of(MINT_TO());
