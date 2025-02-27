@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { MusicProvider } from "./context/MusicContext";
+import { StarknetProvider } from "./components/StarknetProvider";
+import Header from "./components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,9 +30,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-       <MusicProvider>
-          {children}
-        </MusicProvider>
+        <StarknetProvider>
+          <MusicProvider>
+            <Header />
+            {children}
+          </MusicProvider>
+        </StarknetProvider>
       </body>
     </html>
   );
