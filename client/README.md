@@ -5,6 +5,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 First, run the development server:
 
 ```bash
+# Start development server in normal mode
 npm run dev
 # or
 yarn dev
@@ -12,7 +13,19 @@ yarn dev
 pnpm dev
 # or
 bun dev
+
+# To connect to Starknet Sepolia testnet (https://api.cartridge.gg/x/starknet/sepolia)
+# Please use HTTPS mode
+npm run dev-https
+# or
+yarn dev-https
+# or
+pnpm dev-https
+# or
+bun dev-https
 ```
+
+> **Note**: When connecting to Starknet Sepolia testnet (https://api.cartridge.gg/x/starknet/sepolia), since the testnet uses HTTPS protocol, the local development environment also needs to be started in HTTPS mode to avoid mixed content security restrictions.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
