@@ -2,9 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base theme (vanilla) */
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+/* Dark theme */
+[data-theme='dark'] {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --board-bg: #1a1a1a;
+  --square-bg: #262626;
+  --square-border: #404040;
+  --x-color: #60a5fa;
+  --o-color: #f87171;
+  --hover-bg: #333333;
+}
+
+/* Neon theme */
+[data-theme='neon'] {
+  --background: #000000;
+  --foreground: #ffffff;
+  --board-bg: #0c0c0c;
+  --square-bg: #1a1a1a;
+  --square-border: #00ff00;
+  --x-color: #00ffff;
+  --o-color: #ff00ff;
+  --hover-bg: #2a2a2a;
+}
+
+/* Nature theme */
+[data-theme='nature'] {
+  --background: #e6f0e6;
+  --foreground: #2c4a2c;
+  --board-bg: #ffffff;
+  --square-bg: #f0f7f0;
+  --square-border: #4a7c4a;
+  --x-color: #2d5a27;
+  --o-color: #8b4513;
+  --hover-bg: #d1e7d1;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -14,10 +57,39 @@
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+[data-theme='neon'] body {
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  position: relative;
+}
+
+[data-theme='neon'] body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 20%),
+    radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 20%),
+    radial-gradient(circle at 50% 50%, rgba(0, 255, 0, 0.1) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+[data-theme='nature'] body {
+  background-image: url('/nature-bg.svg');
+  position: relative;
+}
+
+[data-theme='nature'] body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+  pointer-events: none;
 }
 
 html, body {
