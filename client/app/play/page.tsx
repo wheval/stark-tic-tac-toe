@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Moon, Sun } from "lucide-react";
-// import Square from './Square';
 import GameBoard from './components/GameBoard';
 import GameScores from './components/GameScores';
 import GameStatus from './components/GameStatus';
+import { useTheme } from '../components/ThemeProvider';
 
 const TicTacToe = () => {
   const [squares, setSquares] = useState<(string | null)[]>(
@@ -15,8 +14,8 @@ const TicTacToe = () => {
   const [xIsNext, setXIsNext] = useState(true);
   const [xScore, setXScore] = useState(0);
   const [oScore, setOScore] = useState(0);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [showWinnerAlert, setShowWinnerAlert] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const calculateWinner = (squares: (string | null)[]) => {
     const lines = [
@@ -72,20 +71,11 @@ const TicTacToe = () => {
     setShowWinnerAlert(null);
   };
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle("dark");
-  };
-
   useEffect(() => {
     const prefersDark = window.matchMedia(
       "(prefers-color-scheme: dark)"
     ).matches;
-    setIsDarkMode(prefersDark);
-
-    if (prefersDark) {
-      document.documentElement.classList.add("dark");
-    }
+    document.documentElement.classList.toggle("dark", prefersDark);
   }, []);
 
   useEffect(() => {
@@ -94,12 +84,66 @@ const TicTacToe = () => {
     return () => clearTimeout(timeout);
   }, [showWinnerAlert]);
 
+  const getContainerStyles = () => {
+    if (theme === 'vanilla') {
+      return {
+        className: "bg-gradient-to-br from-orange-300 via-amber-300 to-yellow-400 dark:from-[#0a192f] dark:via-[#0a192f] dark:to-[#112240] text-gray-900 dark:text-gray-100 transition-colors duration-300 min-h-screen",
+        style: {}
+      };
+    }
+
+    return {
+      className: "text-foreground transition-colors duration-300 min-h-screen",
+      style: {
+        background: 'var(--background)',
+        color: 'var(--foreground)'
+      }
+    };
+  };
+
+  const getTitleStyles = () => {
+    if (theme === 'vanilla') {
+      return {
+        className: "text-4xl md:text-6xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-600 dark:from-red-500 dark:to-red-700",
+        style: {}
+      };
+    }
+
+    return {
+      className: "text-4xl md:text-6xl font-bold mb-8",
+      style: { color: 'var(--x-color)' }
+    };
+  };
+
+  const getResetButtonStyles = () => {
+    if (theme === 'vanilla') {
+      return {
+        className: "px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 dark:from-red-800 dark:to-red-500 text-white rounded-lg text-lg font-semibold shadow-lg hover:from-orange-600 hover:to-amber-600 dark:hover:from-red-500 dark:hover:to-red-800 transition-colors duration-300",
+        style: {}
+      };
+    }
+
+    return {
+      className: "px-6 py-3 rounded-lg text-lg font-semibold shadow-lg transition-colors duration-300",
+      style: {
+        backgroundColor: 'var(--board-bg)',
+        color: 'var(--foreground)',
+        border: '1px solid var(--square-border)'
+      }
+    };
+  };
+
+  const containerStyles = getContainerStyles();
+  const titleStyles = getTitleStyles();
+  const resetButtonStyles = getResetButtonStyles();
+
   return (
     <div className="min-h-screen">
-      <div className="bg-gradient-to-br from-orange-300 via-amber-300 to-yellow-400 dark:from-[#0a192f] dark:via-[#0a192f] dark:to-[#112240] text-gray-900 dark:text-gray-100 transition-colors duration-300 min-h-screen">
+      <div className={containerStyles.className} style={containerStyles.style}>
         <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-screen">
           <motion.h1
-            className="text-4xl md:text-6xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-600 dark:from-red-500 dark:to-red-700"
+            className={titleStyles.className}
+            style={titleStyles.style}
             initial={{ y: -50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
           >
@@ -126,20 +170,12 @@ const TicTacToe = () => {
 
           <motion.button
             onClick={resetGame}
-            className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 dark:from-red-800 dark:to-red-500 text-white rounded-lg text-lg font-semibold shadow-lg hover:from-orange-600 hover:to-amber-600 dark:hover:from-red-500 dark:hover:to-red-800 transition-colors duration-300"
+            className={resetButtonStyles.className}
+            style={resetButtonStyles.style}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             Reset Game
-          </motion.button>
-
-          <motion.button
-            onClick={toggleTheme}
-            className="mt-4 p-2 rounded-full bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
           </motion.button>
         </div>
       </div>
