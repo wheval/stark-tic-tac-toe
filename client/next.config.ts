@@ -7,8 +7,7 @@ const nextConfig: NextConfig = {
       asyncWebAssembly: true,
       layers: true,
     };
-
-    
+ 
     if (isServer) {
       config.module = config.module || {};
       config.module.rules = config.module.rules || [];
