@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
       layers: true,
     };
 
-    // Ignorar archivos .wasm solo del lado del servidor
+    
     if (isServer) {
       config.module = config.module || {};
       config.module.rules = config.module.rules || [];
